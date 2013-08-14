@@ -1,7 +1,5 @@
 package blackjack;
 
-import java.util.*;
-
 public class Cards {
 
 	private int value;		// Holds the face value of each card.
@@ -19,7 +17,7 @@ public class Cards {
 	 * Getter that allows easy displaying of card data.
 	 * @return String with information about cards.
 	 */
-	public String get(){
+	public String getFullInfo(){
 		return "Your card is: \nsuit-" + 
 				this.suit +" \nname-" + 
 				this.name + " \nvalue-" + 
@@ -27,11 +25,25 @@ public class Cards {
 	}
 	
 	/**
-	 * Specific getter, retrieves the value of the card.
-	 * @return - Integer value of the card.
+	 * Retrieves the value of the card.
+	 * @return - Numerical value of the card, such as King = 10.
 	 */
 	public int getValue(){
 		return this.value;
+	}
+	/**
+	 * Retrieves the name of the card.
+	 * @return - String value of the card, such as 'King'
+	 */
+	public String getName(){
+		return this.name;
+	}
+	/**
+	 * Retrieves the suit the card belongs to. 
+	 * @return - String value of the card, such as 'Spades'
+	 */
+	public String getSuit(){
+		return this.suit;
 	}
 
 }
