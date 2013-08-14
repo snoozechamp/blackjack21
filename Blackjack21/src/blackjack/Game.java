@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 public class Game {
 	
-	private boolean state;			// State of the game, if false game over
+	private int state;				// State of the game, 0 at start of game, 1 for player win, 2 for player loss, 3 for tie
 	private boolean turn;			// Determines whose turn it is, true if player's turn
 	public double money;			// Represents the amount of money the player has
 	private ArrayList<Cards> deck;	// Represents a deck of 52 playing cards
@@ -13,11 +13,12 @@ public class Game {
 	private String[] cards;			// Represents each type of card in a deck
 	public ArrayList<Cards> player; // Represents the cards that the player has been dealt
 	public ArrayList<Cards> dealer; // Represents the cards that the dealer has been dealt
+	private int size;
 
 
 	public Game (int amount){
 		// Initialize all the variables
-		state = true;
+		state = 0;
 		money = amount;
 		player = new ArrayList<Cards>();
 		dealer = new ArrayList<Cards>();
@@ -28,33 +29,41 @@ public class Game {
 		
 		// Builds deck of cards
 		build(deck, suits, cards);
+		size = deck.size();
 		
 		// Deals two cards to the dealer and two to the player
 		for(int i = 0; i < 4; i++){
-			deal(deck.size(), turn);
+			deal(size, turn);
 			if(turn)
 				turn = false;
 			else 
 				turn = true;
 		}
-		if(score(player) > 21){
-			state = false;
-		}
-		if(score(dealer) > 21){
-			state = false;
-		}
-		
-		if(state){
-			String choose = JOptionPane.showInputDialog("Would you like to hit that?");
-			if(choose.equalsIgnoreCase("yes")){
-				System.out.println(score(player));
-				deal(deck.size(), true);
+		System.out.println("Player score: " + score(player));
+		System.out.println("Dealer score: " + score(dealer));
+		checkState();
+		// The game loop
+		while(state == 0){
+			String choose = JOptionPane.showInputDialog("Would you like to hit or stand?");
+			if(choose.equalsIgnoreCase("hit")){
+				deal(size, true);
 				System.out.println("New score: " + score(player) + " and card drawn: " + player.get(player.size() - 1).getName());
 				turn = false;
-				System.out.println(score(dealer));
 			}
+			dealerLogic();
+			System.out.println("Player score: " + score(player) +
+							   "\nDealer score: " + score(dealer));
+			checkState();
 		}
-		
+		if(state == 1){
+			System.out.println("You busted!");
+		}
+		else if(state == 2){
+			System.out.println("Dealer wins!");
+		}
+		else if(state == 3){
+			System.out.println("Tie game!");
+		}
 	}
 	/**
 	 * @param args
@@ -109,6 +118,7 @@ public class Game {
 			dealer.add(deck.get(rand.nextInt(index)));
 		// Removes the cards from the deck of 52 as they are dealt to player/dealer
 		deck.remove(index);
+		size--;
 	}
 	/**
 	 * Adds the value of the parameter cards together and returns the 
@@ -148,5 +158,31 @@ public class Game {
 			return score + 1;
 		}
 		return score;
+	}
+	private void checkState(){
+		if(score(player) > 21 && score(dealer) <= 21){
+			state = 2;
+		}
+		if(score(dealer) > 21 && score(player) <= 21){
+			state = 1;
+		}
+		if(score(dealer) > 21 && score(player) > 21){
+			state = 2;
+		}
+		if(score(dealer) >= 17 && score(dealer) <= 21 && score(player) <=21 && score(dealer) == score(player)){
+			state = 3;
+		}
+		if(score(dealer) >= 17 && score(dealer) < 21 && score(player) < 21 && score(dealer) > score(player)){
+			state = 2;
+		}
+		if(score(dealer) > 17 && score(dealer) < 21 && score(player) < 21 && score(dealer) < score(player)){
+			state = 1;
+		}
+	}
+	private void dealerLogic(){
+		if(score(dealer) < 17){
+			deal(size, false);
+			size--;
+		}
 	}
 }
