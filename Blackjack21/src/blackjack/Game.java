@@ -12,14 +12,14 @@ import javax.swing.JOptionPane;
  */
 public class Game {
 	
-	private int state;					// Represents the state of the game and determines who wins the round
-	private boolean turn;				// Determines whose turn it is, true if player's turn
+	private int state;			// Represents the state of the game and determines who wins the round
+	private boolean turn;			// Determines whose turn it is, true if player's turn
 	private boolean hitDoubleStand;		// Determines players choice to hit, double, or stand
-	private double money;				// Represents the amount of money the player has
-	private double bet;					// Represents the player's bet
+	private double money;			// Represents the amount of money the player has
+	private double bet;			// Represents the player's bet
 	private ArrayList<Cards> deck;		// Represents a deck of 52 playing cards
-	private String[] suits;				// Represents each suit in a deck of cards
-	private String[] cards;				// Represents each type of card in a deck
+	private String[] suits;			// Represents each suit in a deck of cards
+	private String[] cards;			// Represents each type of card in a deck
 	private ArrayList<Cards> player; 	// Represents the cards that the player has been dealt
 	private ArrayList<Cards> dealer; 	// Represents the cards that the dealer has been dealt
 	private int size;
